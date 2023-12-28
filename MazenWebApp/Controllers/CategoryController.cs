@@ -29,6 +29,10 @@ namespace MazenWebApp.Controllers
             {
                 ModelState.AddModelError("Name", "Name and Display Order must not be the Same");
             }
+            if (category.Name != null && category.Name.ToLower() == "test")
+            {
+                ModelState.AddModelError("", "test is an invalid value");
+            }
             if (ModelState.IsValid)
             {
                 _context.Categories.Add(category);

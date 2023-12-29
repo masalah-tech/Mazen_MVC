@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MazenWebApp", "MazenWebApp\MazenWebApp.csproj", "{E56C24F5-CC3F-4952-B5C0-9AF3A3EBAAC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MazenWebRazor_Temp", "MazenWebRazor_Temp\MazenWebRazor_Temp.csproj", "{590047C6-3D3D-49AE-A660-0C1FFDAB5ADF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MazenWebRazor_Temp", "MazenWebRazor_Temp\MazenWebRazor_Temp.csproj", "{590047C6-3D3D-49AE-A660-0C1FFDAB5ADF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

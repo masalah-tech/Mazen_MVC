@@ -11,7 +11,7 @@ namespace MazenWebRazor_Temp.Data
             
         }
 
-        DbSet<Category> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

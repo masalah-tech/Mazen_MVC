@@ -1,4 +1,4 @@
-using MazenWebApp.Data;
+using MazenWebApp.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

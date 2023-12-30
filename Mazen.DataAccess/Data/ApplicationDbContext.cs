@@ -1,7 +1,7 @@
 ﻿using MazenWebApp.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace MazenWebApp.Data
+namespace MazenWebApp.DataAccess.Data
 {
     public class ApplicationDbContext :DbContext
     {

@@ -1,4 +1,4 @@
-﻿using MazenWebApp.Data;
+﻿using MazenWebApp.DataAccess.Data;
 using MazenWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 

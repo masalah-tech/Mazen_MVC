@@ -1,4 +1,6 @@
-﻿using MazenWebApp.DataAccess.Data;
+﻿using Mazen.DataAccess.Repository;
+using Mazen.DataAccess.Repository.IRepository;
+using MazenWebApp.DataAccess.Data;
 using MazenWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,15 +8,16 @@ namespace MazenWebApp.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryController(ApplicationDbContext context)
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            var objCategoryList = _context.Categories.ToList();
+            var objCategoryList =
+                _unitOfWork.CategoryRepository.GetAll().ToList();
             return View(objCategoryList);
         }
 
@@ -36,8 +39,8 @@ namespace MazenWebApp.Controllers
             }
             if (ModelState.IsValid)
             {
-                _context.Categories.Add(category);
-                _context.SaveChanges();
+                _unitOfWork.CategoryRepository.Add(category);
+                _unitOfWork.Save();
                 TempData["success"] = "Category created successfully";
                 //return RedirectToAction("Index", "Category");
                 return RedirectToAction("Index");
@@ -54,8 +57,8 @@ namespace MazenWebApp.Controllers
             }
 
             var category =
-                _context.Categories
-                .Find(id);
+                _unitOfWork.CategoryRepository
+                .Get(c => c.Id == id);
 
             //var category =
             //    _context.Categories
@@ -87,8 +90,8 @@ namespace MazenWebApp.Controllers
             }
             if (ModelState.IsValid)
             {
-                _context.Categories.Update(category);
-                _context.SaveChanges();
+                _unitOfWork.CategoryRepository.Update(category);
+                _unitOfWork.Save();
                 TempData["success"] = "Category updated successfully";
                 //return RedirectToAction("Index", "Category");
                 return RedirectToAction("Index");
@@ -105,8 +108,8 @@ namespace MazenWebApp.Controllers
             }
 
             var category =
-                _context.Categories
-                .Find(id);
+                _unitOfWork.CategoryRepository
+                .Get(c => c.Id == id);
 
             if (category == null)
             {
@@ -120,16 +123,16 @@ namespace MazenWebApp.Controllers
         public IActionResult DeletePOST(int? id)
         {
             var category =
-                _context.Categories
-                .Find(id);
+                _unitOfWork.CategoryRepository
+                .Get(c => c.Id == id);
 
             if (category == null)
             {
                 return NotFound();
             }
 
-            _context.Remove(category);
-            _context.SaveChanges();
+            _unitOfWork.CategoryRepository.Remove(category);
+            _unitOfWork.Save();
             TempData["success"] = "Category deleted successfully";
 
             return RedirectToAction("Index");

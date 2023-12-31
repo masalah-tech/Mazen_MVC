@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Mazen.DataAccess\Mazen.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>

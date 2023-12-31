@@ -4,8 +4,9 @@ using MazenWebApp.DataAccess.Data;
 using MazenWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MazenWebApp.Controllers
+namespace MazenWebApp.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -23,6 +23,25 @@ namespace MazenWebApp.Areas.Admin.Controllers
             return View(products);
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                _unitOfWork.ProductRepository.Add(product);
+                _unitOfWork.Save();
+                TempData["success"] = "Product created successfully";
+                return RedirectToAction("Index");
+            }
+
+            return View();
+        }
+
         public IActionResult Edit(int id)
         {
             var product = 
@@ -70,6 +89,44 @@ namespace MazenWebApp.Areas.Admin.Controllers
             //}
 
             
+
+            return View();
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var product =
+                _unitOfWork.ProductRepository
+                .Get(p => p.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePOST(int id)
+        {
+            var product =
+                _unitOfWork
+                .ProductRepository
+                .Get(p => p.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _unitOfWork.ProductRepository.Remove(product);
+                _unitOfWork.Save();
+                TempData["success"] = "Product deleted successfully";
+                return RedirectToAction("Index");
+            }
 
             return View();
         }

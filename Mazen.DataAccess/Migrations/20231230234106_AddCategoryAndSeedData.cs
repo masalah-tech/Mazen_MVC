@@ -4,7 +4,7 @@
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace Mazen.DataAccess.Migrations
+namespace MazenWebApp.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class AddCategoryAndSeedData : Migration

@@ -17,11 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mazen.DataAccess\Mazen.DataAccess.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\Mazen.DataAccess\MazenWebApp.DataAccess.csproj" />
+    <ProjectReference Include="..\Mazen.Models\MazenWebApp.Models.csproj" />
+    <ProjectReference Include="..\Mazen.Utility\MazenWebApp.Utility.csproj" />
   </ItemGroup>
 
 </Project>

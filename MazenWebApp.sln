@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MazenWebApp", "MazenWebApp\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MazenWebRazor_Temp", "MazenWebRazor_Temp\MazenWebRazor_Temp.csproj", "{590047C6-3D3D-49AE-A660-0C1FFDAB5ADF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mazen.DataAccess", "Mazen.DataAccess\Mazen.DataAccess.csproj", "{2527E23D-C31F-47BE-9733-2A5150E2D8BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MazenWebApp.DataAccess", "Mazen.DataAccess\MazenWebApp.DataAccess.csproj", "{2527E23D-C31F-47BE-9733-2A5150E2D8BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mazen.Models", "Mazen.Models\Mazen.Models.csproj", "{204C9EF3-6759-4FC0-970A-712A37237D40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MazenWebApp.Models", "Mazen.Models\MazenWebApp.Models.csproj", "{204C9EF3-6759-4FC0-970A-712A37237D40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mazen.Utility", "Mazen.Utility\Mazen.Utility.csproj", "{1F01B725-C26B-4EBA-8936-6294FF5192DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MazenWebApp.Utility", "Mazen.Utility\MazenWebApp.Utility.csproj", "{1F01B725-C26B-4EBA-8936-6294FF5192DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,7 @@
 ﻿using Mazen.DataAccess.Repository.IRepository;
 using MazenWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MazenWebApp.Areas.Admin.Controllers
 {
@@ -25,6 +26,16 @@ namespace MazenWebApp.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
+            IEnumerable<SelectListItem> categoryList =
+                _unitOfWork.CategoryRepository
+                .GetAll().Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                });
+
+            ViewBag.CategoryList = categoryList;
+
             return View();
         }
 

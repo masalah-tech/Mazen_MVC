@@ -23,8 +23,27 @@ namespace Mazen.DataAccess.Repository
 
         public void Update(Product product)
         {
-            //_context.Entry(product).State = EntityState.Detached;
-            _context.Products.Update(product);
+            var productFromDb =
+                _context.Products
+                .FirstOrDefault(p => p.Id == product.Id);
+
+            if (productFromDb != null)
+            {
+                productFromDb.Title = product.Title;
+                productFromDb.Description = product.Description;
+                product.ISBN = product.ISBN;
+                productFromDb.Price = product.Price;
+                productFromDb.ListPrice = product.ListPrice;
+                productFromDb.Price100 = product.Price100;
+                productFromDb.CategoryId = product.CategoryId;
+                productFromDb.Author = product.Author;
+                productFromDb.Price50 = product.Price50;
+
+                if (product.ImageUrl != null)
+                {
+                    productFromDb.ImageUrl = product.ImageUrl;
+                }
+            }
         }
     }
 }

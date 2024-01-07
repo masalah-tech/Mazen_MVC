@@ -23,7 +23,7 @@ namespace MazenWebApp.Areas.Admin.Controllers
         {
             var products =
                 _unitOfWork.ProductRepository
-                .GetAll();
+                .GetAll(includePropeties: "Category");
 
             return View(products);
         }
@@ -164,5 +164,19 @@ namespace MazenWebApp.Areas.Admin.Controllers
 
             return View();
         }
+
+        #region API CALLS
+
+        [HttpGet]
+        public IActionResult GetAll() 
+        {
+            var products =
+                _unitOfWork.ProductRepository
+                .GetAll(includePropeties: "Category");
+
+            return Json(new { data = products });
+        }
+
+        #endregion
     }
 }

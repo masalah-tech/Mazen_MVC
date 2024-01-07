@@ -19,6 +19,7 @@ namespace MazenWebApp.DataAccess.Repository
         {
             _context = context;
             dbSet = _context.Set<T>();
+            //_context.Products.Include(p => p.Category);
         }
 
         public void Add(T entity)
@@ -26,17 +27,37 @@ namespace MazenWebApp.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public T Get(Expression<Func<T, bool>> filter, string? includePropeties = null)
         {
             IQueryable<T> query = dbSet;
+
+            if (!string.IsNullOrEmpty(includePropeties))
+            {
+                foreach (var includeProp in 
+                    includePropeties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+
             query = query.Where(filter);
 
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? includePropeties = null)
         {
             IQueryable<T> query = dbSet;
+
+            if (!string.IsNullOrEmpty(includePropeties))
+            {
+                foreach (var includeProp in
+                    includePropeties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+
             return query.ToList();
         }
 

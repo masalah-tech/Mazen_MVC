@@ -127,43 +127,29 @@ namespace MazenWebApp.Areas.Admin.Controllers
             return View(productVM);
         }
 
-        public IActionResult Delete(int id)
-        {
-            var product =
-                _unitOfWork.ProductRepository
-                .Get(p => p.Id == id);
+        //[HttpPost, ActionName("Delete")]
+        //public IActionResult DeletePOST(int id)
+        //{
+        //    var product =
+        //        _unitOfWork
+        //        .ProductRepository
+        //        .Get(p => p.Id == id);
 
-            if (product == null)
-            {
-                return NotFound();
-            }
+        //    if (product == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(product);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        _unitOfWork.ProductRepository.Remove(product);
+        //        _unitOfWork.Save();
+        //        TempData["success"] = "Product deleted successfully";
+        //        return RedirectToAction("Index");
+        //    }
 
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int id)
-        {
-            var product =
-                _unitOfWork
-                .ProductRepository
-                .Get(p => p.Id == id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.ProductRepository.Remove(product);
-                _unitOfWork.Save();
-                TempData["success"] = "Product deleted successfully";
-                return RedirectToAction("Index");
-            }
-
-            return View();
-        }
+        //    return View();
+        //}
 
         #region API CALLS
 
@@ -177,6 +163,32 @@ namespace MazenWebApp.Areas.Admin.Controllers
             return Json(new { data = products });
         }
 
+        [HttpDelete]
+        public IActionResult Delete(int? id) 
+        {
+            var product =
+                _unitOfWork.ProductRepository
+                .Get(p => p.Id == id);
+
+            if (product == null)
+            {
+                return Json(new { success = false, message = "Product not found" });
+            }
+
+            var oldImagePath =
+                Path.Combine(_webHostEnvironment.WebRootPath, 
+                    product.ImageUrl.TrimStart('/'));
+
+            if (System.IO.File.Exists(oldImagePath))
+            {
+                System.IO.File.Delete(oldImagePath);
+            }
+
+            _unitOfWork.ProductRepository.Remove(product);
+            _unitOfWork.Save();
+
+            return Json(new { success = true, message = "Product deleted successfully" });
+        }
         #endregion
     }
 }

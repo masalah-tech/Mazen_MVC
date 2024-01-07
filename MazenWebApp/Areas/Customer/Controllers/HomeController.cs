@@ -1,4 +1,5 @@
-﻿using MazenWebApp.Models;
+﻿using Mazen.DataAccess.Repository.IRepository;
+using MazenWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,14 +8,29 @@ namespace MazenWebApp.Areas.Customer.Controllers
     [Area("Customer")]
     public class HomeController : Controller
     {
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController()
+        public HomeController(IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var products =
+                _unitOfWork.ProductRepository
+                .GetAll(includePropeties: "Category");
+
+            return View(products);
+        }
+
+        public IActionResult Details(int id)
+        {
+            var product =
+                _unitOfWork.ProductRepository
+                .Get(p => p.Id == id, includePropeties: "Category");
+
+            return View(product);
         }
 
         public IActionResult Privacy()

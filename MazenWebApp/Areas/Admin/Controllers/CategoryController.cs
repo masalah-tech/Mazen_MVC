@@ -1,12 +1,15 @@
 ﻿using Mazen.DataAccess.Repository;
 using Mazen.DataAccess.Repository.IRepository;
+using Mazen.Utility;
 using MazenWebApp.DataAccess.Data;
 using MazenWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MazenWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -27,14 +27,15 @@ namespace MazenWebApp.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includePropeties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includePropeties = null, bool tracked = false)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query = 
+                tracked ? dbSet : dbSet.AsNoTracking();
 
             if (!string.IsNullOrEmpty(includePropeties))
             {
-                foreach (var includeProp in 
-                    includePropeties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var includeProp in
+                    includePropeties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProp);
                 }
@@ -43,11 +44,18 @@ namespace MazenWebApp.DataAccess.Repository
             query = query.Where(filter);
 
             return query.FirstOrDefault();
+
         }
 
-        public IEnumerable<T> GetAll(string? includePropeties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includePropeties = null)
         {
             IQueryable<T> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
 
             if (!string.IsNullOrEmpty(includePropeties))
             {

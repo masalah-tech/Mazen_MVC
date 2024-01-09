@@ -1,7 +1,9 @@
 ﻿using Mazen.DataAccess.Repository.IRepository;
 using MazenWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace MazenWebApp.Areas.Customer.Controllers
 {
@@ -24,13 +26,49 @@ namespace MazenWebApp.Areas.Customer.Controllers
             return View(products);
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details(int productId)
         {
-            var product =
-                _unitOfWork.ProductRepository
-                .Get(p => p.Id == id, includePropeties: "Category");
+            var cart = new ShoppingCart
+            {
+                Product = _unitOfWork.ProductRepository
+                    .Get(p => p.Id == productId, includePropeties: "Category"),
+                Count = 1,
+                ProductId = productId,
 
-            return View(product);
+            };
+
+            return View(cart);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            shoppingCart.ApplicationUserId = userId;
+
+            ShoppingCart cartFromDb =
+                _unitOfWork.ShoppingCartRepository
+                .Get(sc => sc.ApplicationUserId == userId
+                    && sc.ProductId == shoppingCart.ProductId);
+
+            if (cartFromDb != null)
+            {
+                // shopping cart already exists
+                cartFromDb.Count += shoppingCart.Count;
+                _unitOfWork.ShoppingCartRepository.Update(cartFromDb);
+            }
+            else
+            {
+                // add new cart
+                _unitOfWork.ShoppingCartRepository.Add(shoppingCart);
+            }
+
+            _unitOfWork.Save();
+            TempData["success"] = "Cart updated successfully";
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()

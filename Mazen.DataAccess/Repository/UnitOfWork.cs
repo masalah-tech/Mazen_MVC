@@ -1,5 +1,7 @@
 ﻿using Mazen.DataAccess.Repository.IRepository;
 using MazenWebApp.DataAccess.Data;
+using MazenWebApp.DataAccess.Repository;
+using MazenWebApp.DataAccess.Repository.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +17,14 @@ namespace Mazen.DataAccess.Repository
         public ICategoryRepository CategoryRepository { get; private set; }
         public IProductRepository ProductRepository { get; private set; }
 
+        public ICompanyRepository CompanyRepository { get; private set; }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             CategoryRepository = new CategoryRepository(_context);
             ProductRepository = new ProductRepository(_context);
+            CompanyRepository = new CompanyRepository(_context);
         }
 
         public void Save()

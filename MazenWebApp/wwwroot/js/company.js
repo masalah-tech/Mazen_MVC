@@ -1,58 +1,66 @@
 var dataTable;
 
 $(document).ready(function () {
-    loadDataTable();
+    populateCompaniesTable();
 });
 
+function populateCompaniesTable() {
 
-function loadDataTable() {
+    //fetch("/Admin/Company/GetAll")
+    //    .then(res => res.json())
+    //    .then(data => {
+    //        console.log(data)
+    //    })
+
     dataTable = $('#tblData').DataTable(
         {
             ajax: {
-                url: '/Admin/Product/GetAll'
-            }
-            ,
+                url: '/Admin/Company/GetAll'
+            },
             columns: [
                 {
-                    data: 'title',
-                    width: '25%'
+                    data: "name",
+                    width: "10%"
                 },
                 {
-                    data: 'isbn',
-                    width: '15%'
+                    data: "streetAddress",
+                    width: "10%"
                 },
                 {
-                    data: 'listPrice',
-                    width: '10%'
+                    data: "city",
+                    width: "10%"
                 },
                 {
-                    data: 'author',
-                    width: '15%'
+                    data: "state",
+                    width: "10%"
                 },
                 {
-                    data: 'category.name',
-                    width: '10%'
+                    data: "postalCode",
+                    width: "10%"
                 },
                 {
-                    data: 'id',
+                    data: "phoneNumber",
+                    width: "10%"
+                },
+                {
+                    data: "id",
                     render: function (data) {
                         return `<div class="btn-group w-75" role="group">
-                            <a href="/Admin/Product/Upsert/${data}" class="btn btn-primary mx-2">
+                            <a href="/Admin/Company/Upsert/${data}" class="btn btn-primary mx-2">
                                 <i class="bi bi-pencil-square"></i> Edit
                             </a>
-                            <a onClick='deleteProduct("/Admin/Product/Delete/${data}")' class="btn btn-danger mx-2">
+                            <a onClick='deleteCompany("/Admin/Company/Delete/${data}")' class="btn btn-danger mx-2">
                                 <i class="bi bi-trash-fill"></i> Delete
                             </a>
                         </div>`;
-                    },
-                    width: '25%'
+                    }
                 },
-
             ]
-        });
+        }
+    );
 }
 
-function deleteProduct (url) {
+function deleteCompany(url) {
     Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",

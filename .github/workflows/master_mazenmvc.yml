@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'MazenMVC'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_86FA30555C594212A769C2608ECDD865 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8B22CF18390844369073F17B9DDB9571 }}
           package: .

@@ -202,6 +202,7 @@ namespace MazenWebApp.Areas.Customer.Controllers
 						.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
 					_unitOfWork.Save();
 				}
+				HttpContext.Session.Clear();
 			}
 
 			var shoppingCarts = 
@@ -231,12 +232,16 @@ namespace MazenWebApp.Areas.Customer.Controllers
 		public IActionResult Minus(int cartId)
 		{
 			var cartFromDb =
-				_unitOfWork.ShoppingCartRepository.Get(sc => sc.Id == cartId);
+				_unitOfWork.ShoppingCartRepository.Get(sc => sc.Id == cartId, tracked: true);
 
 			if (cartFromDb.Count <= 1)
 			{
-				// remove product from the cart
-				_unitOfWork.ShoppingCartRepository.Remove(cartFromDb);
+                // remove product from the cart
+
+                HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCartRepository
+                    .GetAll(sc => sc.ApplicationUserId == cartFromDb.ApplicationUserId).Count() - 1);
+
+                _unitOfWork.ShoppingCartRepository.Remove(cartFromDb);
 			}
 			else
 			{
@@ -244,8 +249,8 @@ namespace MazenWebApp.Areas.Customer.Controllers
 				_unitOfWork.ShoppingCartRepository.Update(cartFromDb);
 			}
 
-
 			_unitOfWork.Save();
+
 
 			return RedirectToAction(nameof(Index));
 		}
@@ -253,10 +258,13 @@ namespace MazenWebApp.Areas.Customer.Controllers
 		public IActionResult Remove(int cartId)
 		{
 			var cartFromDb =
-				_unitOfWork.ShoppingCartRepository.Get(sc => sc.Id == cartId);
+				_unitOfWork.ShoppingCartRepository.Get(sc => sc.Id == cartId, tracked: true);
+
+            HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCartRepository
+                .GetAll(sc => sc.ApplicationUserId == cartFromDb.ApplicationUserId).Count() - 1);
 
 			_unitOfWork.ShoppingCartRepository.Remove(cartFromDb);
-			_unitOfWork.Save();
+            _unitOfWork.Save();
 
 			return RedirectToAction(nameof(Index));
 		}

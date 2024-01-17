@@ -25,7 +25,7 @@ namespace MazenWebApp.Areas.Customer.Controllers
 
             var products =
                 _unitOfWork.ProductRepository
-                .GetAll(includePropeties: "Category");
+                .GetAll(includePropeties: "Category,ProductImages");
 
             return View(products);
         }
@@ -35,7 +35,7 @@ namespace MazenWebApp.Areas.Customer.Controllers
             var cart = new ShoppingCart
             {
                 Product = _unitOfWork.ProductRepository
-                    .Get(p => p.Id == productId, includePropeties: "Category"),
+                    .Get(p => p.Id == productId, includePropeties: "Category,ProductImages"),
                 Count = 1,
                 ProductId = productId,
 

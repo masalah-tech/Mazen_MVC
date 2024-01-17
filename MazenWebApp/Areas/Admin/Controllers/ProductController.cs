@@ -64,7 +64,7 @@ namespace MazenWebApp.Areas.Admin.Controllers
                 // update
                 productVM.Product =
                     _unitOfWork.ProductRepository
-                    .Get(p => p.Id == id);
+                    .Get(p => p.Id == id, includePropeties: "ProductImages");
             }
 
             return View(productVM);
@@ -166,6 +166,35 @@ namespace MazenWebApp.Areas.Admin.Controllers
         //    return View();
         //}
 
+        public IActionResult DeleteImage(int imageId)
+        {
+            var imgToBeDeleted = 
+                _unitOfWork.ProductImageRepository
+                .Get(pi => pi.Id == imageId);
+
+            if (imgToBeDeleted != null)
+            {
+                if (!string.IsNullOrEmpty(imgToBeDeleted.ImageUrl))
+                {
+                    var oldImagePath =
+                        Path.Combine(_webHostEnvironment.WebRootPath,
+                            imgToBeDeleted.ImageUrl.TrimStart('/'));
+
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+
+                _unitOfWork.ProductImageRepository.Remove(imgToBeDeleted);
+                _unitOfWork.Save();
+
+                TempData["success"] = "Deleted successfully";
+            }
+
+            return RedirectToAction(nameof(Upsert), new { id = imgToBeDeleted.ProductId });
+        }
+
         #region API CALLS
 
         [HttpGet]
@@ -198,6 +227,22 @@ namespace MazenWebApp.Areas.Admin.Controllers
             //{
             //    System.IO.File.Delete(oldImagePath);
             //}
+
+            string productPath = @"images/products/product-" + id;
+            string finalPath = Path.Combine(_webHostEnvironment.WebRootPath, productPath);
+
+            if (Directory.Exists(finalPath))
+            {
+                string[] filePaths = Directory.GetFiles(finalPath);
+
+                foreach (var path in filePaths)
+                {
+                    System.IO.File.Delete(path);
+                }
+
+                Directory.Delete(finalPath);
+            }
+
 
             _unitOfWork.ProductRepository.Remove(product);
             _unitOfWork.Save();

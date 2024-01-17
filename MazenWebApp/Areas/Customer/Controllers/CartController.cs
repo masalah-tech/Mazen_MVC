@@ -35,8 +35,17 @@ namespace MazenWebApp.Areas.Customer.Controllers
 				OrderHeader = new()
 			};
 
+			IEnumerable<ProductImage> productImages =
+				_unitOfWork.ProductImageRepository
+				.GetAll();
+
 			foreach (var cart in ShoppingCartVM.ShoppingCartList)
 			{
+				cart.Product.ProductImages =
+					productImages
+					.Where(pi => pi.ProductId == cart.Product.Id)
+					.ToList();
+
 				cart.Price = GetPriceBasedOnQuatity(cart);
 				ShoppingCartVM.OrderHeader.OrderTotal += cart.Price * cart.Count;
 			}

@@ -82,24 +82,24 @@ namespace MazenWebApp.Areas.Admin.Controllers
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(productImg.FileName);
                     string productPath = Path.Combine(wwwwRootPath, @"images/product");
 
-                    if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
-                    {
-                        // Delete the old image
-                        var oldImagePath = 
-                            Path.Combine(wwwwRootPath, productVM.Product.ImageUrl.TrimStart('/'));
+                    //if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
+                    //{
+                    //    // Delete the old image
+                    //    var oldImagePath = 
+                    //        Path.Combine(wwwwRootPath, productVM.Product.ImageUrl.TrimStart('/'));
 
-                        if (System.IO.File.Exists(oldImagePath))
-                        {
-                            System.IO.File.Delete(oldImagePath);
-                        }
-                    }
+                    //    if (System.IO.File.Exists(oldImagePath))
+                    //    {
+                    //        System.IO.File.Delete(oldImagePath);
+                    //    }
+                    //}
 
-                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
-                    {
-                        productImg.CopyTo(fileStream);
-                    }
+                    //using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    //{
+                    //    productImg.CopyTo(fileStream);
+                    //}
 
-                    productVM.Product.ImageUrl = @"/images/product/" + fileName;
+                    //productVM.Product.ImageUrl = @"/images/product/" + fileName;
                 }
 
                 if (productVM.Product.Id == 0)
@@ -179,14 +179,14 @@ namespace MazenWebApp.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Product not found" });
             }
 
-            var oldImagePath =
-                Path.Combine(_webHostEnvironment.WebRootPath, 
-                    product.ImageUrl.TrimStart('/'));
+            //var oldImagePath =
+            //    Path.Combine(_webHostEnvironment.WebRootPath, 
+            //        product.ImageUrl.TrimStart('/'));
 
-            if (System.IO.File.Exists(oldImagePath))
-            {
-                System.IO.File.Delete(oldImagePath);
-            }
+            //if (System.IO.File.Exists(oldImagePath))
+            //{
+            //    System.IO.File.Delete(oldImagePath);
+            //}
 
             _unitOfWork.ProductRepository.Remove(product);
             _unitOfWork.Save();

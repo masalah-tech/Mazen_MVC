@@ -39,10 +39,10 @@ namespace Mazen.DataAccess.Repository
                 productFromDb.Author = product.Author;
                 productFromDb.Price50 = product.Price50;
 
-                if (product.ImageUrl != null)
-                {
-                    productFromDb.ImageUrl = product.ImageUrl;
-                }
+                //if (product.ImageUrl != null)
+                //{
+                //    productFromDb.ImageUrl = product.ImageUrl;
+                //}
             }
         }
     }

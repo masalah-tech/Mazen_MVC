@@ -38,6 +38,7 @@ namespace Mazen.DataAccess.Repository
                 productFromDb.CategoryId = product.CategoryId;
                 productFromDb.Author = product.Author;
                 productFromDb.Price50 = product.Price50;
+                productFromDb.ProductImages = product.ProductImages;
 
                 //if (product.ImageUrl != null)
                 //{

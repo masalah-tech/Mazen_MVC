@@ -16,7 +16,7 @@ namespace MazenWebApp.Areas.Admin.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(IUnitOfWork unitOfWork, 
+        public ProductController(IUnitOfWork unitOfWork,
             IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
@@ -48,7 +48,7 @@ namespace MazenWebApp.Areas.Admin.Controllers
 
             var productVM = new ProductVM
             {
-                CategoryList = 
+                CategoryList =
                     _unitOfWork.CategoryRepository
                     .GetAll()
                     .Select(c => new SelectListItem
@@ -62,7 +62,7 @@ namespace MazenWebApp.Areas.Admin.Controllers
             if (id != null && id != 0)
             {
                 // update
-                productVM.Product = 
+                productVM.Product =
                     _unitOfWork.ProductRepository
                     .Get(p => p.Id == id);
             }
@@ -71,49 +71,60 @@ namespace MazenWebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Upsert(ProductVM productVM, IFormFile? productImg)
+        public IActionResult Upsert(ProductVM productVM, List<IFormFile>? productImgs)
         {
             if (ModelState.IsValid)
             {
-                string wwwwRootPath = _webHostEnvironment.WebRootPath;
-
-                if (productImg != null)
-                {
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(productImg.FileName);
-                    string productPath = Path.Combine(wwwwRootPath, @"images/product");
-
-                    //if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
-                    //{
-                    //    // Delete the old image
-                    //    var oldImagePath = 
-                    //        Path.Combine(wwwwRootPath, productVM.Product.ImageUrl.TrimStart('/'));
-
-                    //    if (System.IO.File.Exists(oldImagePath))
-                    //    {
-                    //        System.IO.File.Delete(oldImagePath);
-                    //    }
-                    //}
-
-                    //using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
-                    //{
-                    //    productImg.CopyTo(fileStream);
-                    //}
-
-                    //productVM.Product.ImageUrl = @"/images/product/" + fileName;
-                }
-
                 if (productVM.Product.Id == 0)
                 {
                     _unitOfWork.ProductRepository.Add(productVM.Product);
-                    TempData["success"] = "Product created successfully";
                 }
                 else
                 {
                     _unitOfWork.ProductRepository.Update(productVM.Product);
-                    TempData["success"] = "Product updated successfully";
                 }
 
                 _unitOfWork.Save();
+
+                string wwwwRootPath = _webHostEnvironment.WebRootPath;
+
+                if (productImgs != null)
+                {
+                    foreach (var img in productImgs)
+                    {
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(img.FileName);
+                        string productPath = @"images/products/product-" + productVM.Product.Id;
+                        string finalPath = Path.Combine(wwwwRootPath, productPath);
+
+                        if (!Directory.Exists(finalPath))
+                        {
+                            Directory.CreateDirectory(finalPath);
+                        }
+
+                        using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+                        {
+                            img.CopyTo(fileStream);
+                        }
+
+                        ProductImage productImage = new()
+                        {
+                            ImageUrl = "/" + productPath + "/" + fileName,
+                            ProductId = productVM.Product.Id,
+                        };
+
+                        if (productVM.Product.ProductImages == null)
+                        {
+                            productVM.Product.ProductImages = new List<ProductImage>();
+                        }
+
+                        productVM.Product.ProductImages.Add(productImage);
+                    }
+
+                    _unitOfWork.ProductRepository.Update(productVM.Product);
+                    _unitOfWork.Save();
+                }
+
+                TempData["success"] = "Product created/updated successfully";
                 return RedirectToAction("Index");
             }
             else
@@ -158,7 +169,7 @@ namespace MazenWebApp.Areas.Admin.Controllers
         #region API CALLS
 
         [HttpGet]
-        public IActionResult GetAll() 
+        public IActionResult GetAll()
         {
             var products =
                 _unitOfWork.ProductRepository
@@ -168,7 +179,7 @@ namespace MazenWebApp.Areas.Admin.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete(int? id) 
+        public IActionResult Delete(int? id)
         {
             var product =
                 _unitOfWork.ProductRepository

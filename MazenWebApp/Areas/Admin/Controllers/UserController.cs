@@ -25,7 +25,13 @@ namespace MazenWebApp.Areas.Admin.Controllers
             return View();
         }
 
-       
+        public IActionResult RoleManagement(int userId)
+        {
+
+
+            return View();
+        }
+
         #region API CAlls
 
         [HttpGet]

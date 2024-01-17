@@ -1,1 +1,69 @@
-﻿
+﻿@model RoleManagementVM
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Manage User Role</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" class="row" enctype="multipart/form-data">
+            <input type="hidden" asp-for="UserId" />
+            <div class="row">
+                <div class="border p-3 mt-4">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-floating py-2 col-12">
+                        <input asp-for="UserName" class="form-control border-0 shadow" />
+                        <label asp-for="UserName" class="ms-2"></label>
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating py-2 col-12">
+                        <select id="roleSelect" asp-for="RoleId" asp-items="Model.Roles" class="form-select border-0 shadow">
+                        </select>
+                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                    </div>
+                    <div id="companySelectWrapper" class="form-floating py-2 col-12 @if (Model.UserRole != SD.Role_Company) WriteLiteral("d-none");">
+                        <select asp-for="CompanyId" asp-items="Model.Companies" class="form-select border-0 shadow">
+                        </select>
+                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col-6 col-md-3">
+                            <button type="submit" class="btn btn-primary form-control">Update</button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <a asp-area="Admin" asp-controller="User" asp-action="Index"
+                               class="btn btn-outline-secondary border form-control">
+                                Back to list
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+        $(document).ready(function() {
+            $("#roleSelect").change(function() {
+                let selection = $("#roleSelect option:selected").text();
+
+                if (selection == "Company") {
+                    $("#companySelectWrapper").removeClass("d-none");
+                }
+                else {
+                    $("#companySelectWrapper").addClass("d-none");
+                }
+            });
+        });
+    </script>
+}

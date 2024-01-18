@@ -20,5 +20,10 @@ namespace Mazen.DataAccess.Repository
         {
             _context = context;
         }
+
+        public void Update(ApplicationUser applicationUser)
+        {
+            _context.ApplicationUsers.Update(applicationUser);
+        }
     }
 }

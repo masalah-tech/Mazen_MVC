@@ -73,71 +73,71 @@ namespace MazenWebApp.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Upsert(ProductVM productVM, List<IFormFile>? productImgs)
         {
-            if (ModelState.IsValid)
-            {
-                if (productVM.Product.Id == 0)
-                {
-                    _unitOfWork.ProductRepository.Add(productVM.Product);
-                }
-                else
-                {
-                    _unitOfWork.ProductRepository.Update(productVM.Product);
-                }
+            //if (ModelState.IsValid)
+            //{
+            //    if (productVM.Product.Id == 0)
+            //    {
+            //        _unitOfWork.ProductRepository.Add(productVM.Product);
+            //    }
+            //    else
+            //    {
+            //        _unitOfWork.ProductRepository.Update(productVM.Product);
+            //    }
 
-                _unitOfWork.Save();
+            //    _unitOfWork.Save();
 
-                string wwwwRootPath = _webHostEnvironment.WebRootPath;
+            //    string wwwwRootPath = _webHostEnvironment.WebRootPath;
 
-                if (productImgs != null)
-                {
-                    foreach (var img in productImgs)
-                    {
-                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(img.FileName);
-                        string productPath = @"images/products/product-" + productVM.Product.Id;
-                        string finalPath = Path.Combine(wwwwRootPath, productPath);
+            //    if (productImgs != null)
+            //    {
+            //        foreach (var img in productImgs)
+            //        {
+            //            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(img.FileName);
+            //            string productPath = @"images/products/product-" + productVM.Product.Id;
+            //            string finalPath = Path.Combine(wwwwRootPath, productPath);
 
-                        if (!Directory.Exists(finalPath))
-                        {
-                            Directory.CreateDirectory(finalPath);
-                        }
+            //            if (!Directory.Exists(finalPath))
+            //            {
+            //                Directory.CreateDirectory(finalPath);
+            //            }
 
-                        using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
-                        {
-                            img.CopyTo(fileStream);
-                        }
+            //            using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+            //            {
+            //                img.CopyTo(fileStream);
+            //            }
 
-                        ProductImage productImage = new()
-                        {
-                            ImageUrl = "/" + productPath + "/" + fileName,
-                            ProductId = productVM.Product.Id,
-                        };
+            //            ProductImage productImage = new()
+            //            {
+            //                ImageUrl = "/" + productPath + "/" + fileName,
+            //                ProductId = productVM.Product.Id,
+            //            };
 
-                        if (productVM.Product.ProductImages == null)
-                        {
-                            productVM.Product.ProductImages = new List<ProductImage>();
-                        }
+            //            if (productVM.Product.ProductImages == null)
+            //            {
+            //                productVM.Product.ProductImages = new List<ProductImage>();
+            //            }
 
-                        productVM.Product.ProductImages.Add(productImage);
-                    }
+            //            productVM.Product.ProductImages.Add(productImage);
+            //        }
 
-                    _unitOfWork.ProductRepository.Update(productVM.Product);
-                    _unitOfWork.Save();
-                }
+            //        _unitOfWork.ProductRepository.Update(productVM.Product);
+            //        _unitOfWork.Save();
+            //    }
 
-                TempData["success"] = "Product created/updated successfully";
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                productVM.CategoryList =
-                    _unitOfWork.CategoryRepository
-                    .GetAll()
-                    .Select(c => new SelectListItem
-                    {
-                        Text = c.Name,
-                        Value = c.Id.ToString()
-                    });
-            }
+            //    TempData["success"] = "Product created/updated successfully";
+            //    return RedirectToAction("Index");
+            //}
+            //else
+            //{
+            //    productVM.CategoryList =
+            //        _unitOfWork.CategoryRepository
+            //        .GetAll()
+            //        .Select(c => new SelectListItem
+            //        {
+            //            Text = c.Name,
+            //            Value = c.Id.ToString()
+            //        });
+            //}
 
             return View(productVM);
         }
@@ -172,25 +172,25 @@ namespace MazenWebApp.Areas.Admin.Controllers
                 _unitOfWork.ProductImageRepository
                 .Get(pi => pi.Id == imageId);
 
-            if (imgToBeDeleted != null)
-            {
-                if (!string.IsNullOrEmpty(imgToBeDeleted.ImageUrl))
-                {
-                    var oldImagePath =
-                        Path.Combine(_webHostEnvironment.WebRootPath,
-                            imgToBeDeleted.ImageUrl.TrimStart('/'));
+            //if (imgToBeDeleted != null)
+            //{
+            //    if (!string.IsNullOrEmpty(imgToBeDeleted.ImageUrl))
+            //    {
+            //        var oldImagePath =
+            //            Path.Combine(_webHostEnvironment.WebRootPath,
+            //                imgToBeDeleted.ImageUrl.TrimStart('/'));
 
-                    if (System.IO.File.Exists(oldImagePath))
-                    {
-                        System.IO.File.Delete(oldImagePath);
-                    }
-                }
+            //        if (System.IO.File.Exists(oldImagePath))
+            //        {
+            //            System.IO.File.Delete(oldImagePath);
+            //        }
+            //    }
 
-                _unitOfWork.ProductImageRepository.Remove(imgToBeDeleted);
-                _unitOfWork.Save();
+            //    _unitOfWork.ProductImageRepository.Remove(imgToBeDeleted);
+            //    _unitOfWork.Save();
 
-                TempData["success"] = "Deleted successfully";
-            }
+            //    TempData["success"] = "Deleted successfully";
+            //}
 
             return RedirectToAction(nameof(Upsert), new { id = imgToBeDeleted.ProductId });
         }
@@ -210,42 +210,42 @@ namespace MazenWebApp.Areas.Admin.Controllers
         [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            var product =
-                _unitOfWork.ProductRepository
-                .Get(p => p.Id == id);
+            //var product =
+            //    _unitOfWork.ProductRepository
+            //    .Get(p => p.Id == id);
 
-            if (product == null)
-            {
-                return Json(new { success = false, message = "Product not found" });
-            }
-
-            //var oldImagePath =
-            //    Path.Combine(_webHostEnvironment.WebRootPath, 
-            //        product.ImageUrl.TrimStart('/'));
-
-            //if (System.IO.File.Exists(oldImagePath))
+            //if (product == null)
             //{
-            //    System.IO.File.Delete(oldImagePath);
+            //    return Json(new { success = false, message = "Product not found" });
             //}
 
-            string productPath = @"images/products/product-" + id;
-            string finalPath = Path.Combine(_webHostEnvironment.WebRootPath, productPath);
+            ////var oldImagePath =
+            ////    Path.Combine(_webHostEnvironment.WebRootPath, 
+            ////        product.ImageUrl.TrimStart('/'));
 
-            if (Directory.Exists(finalPath))
-            {
-                string[] filePaths = Directory.GetFiles(finalPath);
+            ////if (System.IO.File.Exists(oldImagePath))
+            ////{
+            ////    System.IO.File.Delete(oldImagePath);
+            ////}
 
-                foreach (var path in filePaths)
-                {
-                    System.IO.File.Delete(path);
-                }
+            //string productPath = @"images/products/product-" + id;
+            //string finalPath = Path.Combine(_webHostEnvironment.WebRootPath, productPath);
 
-                Directory.Delete(finalPath);
-            }
+            //if (Directory.Exists(finalPath))
+            //{
+            //    string[] filePaths = Directory.GetFiles(finalPath);
+
+            //    foreach (var path in filePaths)
+            //    {
+            //        System.IO.File.Delete(path);
+            //    }
+
+            //    Directory.Delete(finalPath);
+            //}
 
 
-            _unitOfWork.ProductRepository.Remove(product);
-            _unitOfWork.Save();
+            //_unitOfWork.ProductRepository.Remove(product);
+            //_unitOfWork.Save();
 
             return Json(new { success = true, message = "Product deleted successfully" });
         }

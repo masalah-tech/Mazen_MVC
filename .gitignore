@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /MazenWebApp/appsettings.json
+/MazenWebApp/appsettings.Development.json
+/MazenWebApp/appsettings.Production.json
